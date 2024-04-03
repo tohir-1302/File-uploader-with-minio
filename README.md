@@ -71,3 +71,6 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](LICENSE).
+
+## Minio doc 
+[minio doc Developers](https://min.io/docs/minio/linux/developers/javascript/API.html#presignedurl-httpmethod-bucketname-objectname-expiry-reqparams-requestdate-cb).
