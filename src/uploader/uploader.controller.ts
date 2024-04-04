@@ -1,16 +1,31 @@
-import { Controller, Post, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { Controller, Post, UseInterceptors, UploadedFile, Param, Get, Query, Body } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { MinioService } from 'src/minio/minio.service';
+import { UploaderService } from './uploader.service';
+import { GetUrlDto } from './dto/getUrl.dto';
+import { FileUploadDto } from './dto/filee.upload.dto';
 
 @Controller('uploader')
 export class UploaderController {
-  constructor(private readonly minioService: MinioService) {}
+  constructor(
+    private readonly service: UploaderService
+  ) { }
 
   @Post('add')
   @UseInterceptors(FileInterceptor('file'))
-  async add(@UploadedFile() file: Express.Multer.File) {
-    await this.minioService.createBucketIfNotExists()
-    const fileName = await this.minioService.uploadFile(file)
-    return fileName
+  async add(@UploadedFile() file: Express.Multer.File, @Body() dto: FileUploadDto) {
+    try {
+      return await this.service.uploadFile(file, dto.bucketName);
+    } catch (error) {
+      return error
+    }
+  }
+
+  @Get('get-url')
+  async getUrl(@Query() dto: GetUrlDto) {
+    try {
+      return await this.service.getUrl(dto)
+    } catch (error) {
+      return error
+    }
   }
 }
