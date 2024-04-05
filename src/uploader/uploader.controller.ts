@@ -1,4 +1,4 @@
-import { Controller, Post, UseInterceptors, UploadedFile, Param, Get, Query, Body } from '@nestjs/common';
+import { Controller, Post, UseInterceptors, UploadedFile, Param, Get, Query, Body, NotFoundException } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UploaderService } from './uploader.service';
 import { GetUrlDto } from './dto/getUrl.dto';
@@ -16,7 +16,7 @@ export class UploaderController {
     try {
       return await this.service.uploadFile(file, dto.bucketName);
     } catch (error) {
-      return error
+      throw new NotFoundException(error)
     }
   }
 
@@ -25,7 +25,7 @@ export class UploaderController {
     try {
       return await this.service.getUrl(dto)
     } catch (error) {
-      return error
+      throw new NotFoundException(error)
     }
   }
 }
